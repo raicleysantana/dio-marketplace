@@ -1,5 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
-import React, {useState, useMemo} from 'react';
+import React, {useMemo} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {FlatList, Text, View} from 'react-native';
 import {
     Container,
@@ -22,36 +23,19 @@ import {
 } from "./styles";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import formatValue from '../../utils/formatValue';
+import EmptyCart from "../../components/EmptyCart";
+import * as CartActions from '../../store/modules/cart/actions';
 
 export default function Cart() {
-    const [products, setProducts] = useState([
-        {
-            "id": "1",
-            "title": "Assinatura Trimestral",
-            "image_url":
-                "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/quarterly_subscription_yjolpc.png",
-            "price": 150,
-            "quantity": 2,
-        },
-
-        {
-            "id": "2",
-            "title": "Assinatura Trimestral",
-            "image_url":
-                "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/quarterly_subscription_yjolpc.png",
-            "price": 150,
-            "quantity": 2,
-        },
-
-    ]);
-
+    const dispatch = useDispatch();
+    const products = useSelector(({cart}) => cart);
     const cartSize = useMemo(() => {
         return products.length || 0;
     }, [products]);
 
     const cartTotal = useMemo(() => {
         const cartAmount = products.reduce((accumulator, products) => {
-            const totalPrice = accumulator + (products.price * products.quantity);
+            const totalPrice = accumulator + (products.price * products.amount);
             return totalPrice;
         }, 0);
 
@@ -64,9 +48,10 @@ export default function Cart() {
                 <ProductList
                     data={products}
                     keyExtractor={(item) => item.id}
-                    listFooterComponent={<View/>}
-                    listFooterComponentStyle={{
-                        height: 150,
+                    ListEmptyComponent={<EmptyCart/>}
+                    ListFooterComponent={<View/>}
+                    ListFooterComponentStyle={{
+                        height: 80,
                         flex: 1
                     }}
                     renderItem={({item}) => (
@@ -79,11 +64,11 @@ export default function Cart() {
                                 </ProductPrice>
                                 <TotalContainer>
                                     <ProductQuantity>
-                                        {`${item.quantity}x`}
+                                        {`${item.amount}x`}
                                     </ProductQuantity>
 
                                     <ProductPrice>
-                                        {formatValue((item.price * item.quantity))}
+                                        {formatValue((item.price * item.amount))}
                                     </ProductPrice>
                                 </TotalContainer>
                             </ProductTitleContainer>

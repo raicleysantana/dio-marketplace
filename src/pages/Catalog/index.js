@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {View} from 'react-native';
 import {
     Container,
     Product,
-    ProductButtom,
-    ProductButtomText,
+    ProductButton,
+    ProductButtonText,
     ProductContainer,
     ProductImage,
     ProductList,
@@ -13,69 +14,37 @@ import {
     ProductTitle
 } from "./styles";
 import Feather from 'react-native-vector-icons/Feather';
-import FloatCart from '../../components/FloatingCart';
 import formatValue from '../../utils/formatValue';
 import FloatingCart from "../../components/FloatingCart";
+import api from '../../services/api';
+import * as CartActions from '../../store/modules/cart/actions';
 
 export default function Catalog() {
+    const dispatch = useDispatch();
+    const [products, setProducts] = useState([]);
 
-    const [products, setProducts] = useState(
-        [
-            {
-                "id": "1",
-                "title": "Assinatura Trimestral",
-                "image_url":
-                    "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/quarterly_subscription_yjolpc.png",
-                "price": 150
-            },
-            {
-                "id": "2",
-                "title": "Assinatura Anual",
-                "image_url":
-                    "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/annual_subscription_qyolci.png",
-                "price": 99.9
-            },
-            {
-                "id": "3",
-                "title": "Assinatura Anual",
-                "image_url":
-                    "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/annual_subscription_qyolci.png",
-                "price": 49.90
-            },
-            {
-                "id": "4",
-                "title": "Assinatura Anual",
-                "image_url":
-                    "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/annual_subscription_qyolci.png",
-                "price": 100
-            },
+    useEffect(() => {
+        async function loadProducts() {
+            const {data} = await api.get('/products');
+            setProducts(data);
+        }
 
-            {
-                "id": "5",
-                "title": "Assinatura Anual",
-                "image_url":
-                    "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/annual_subscription_qyolci.png",
-                "price": 120
-            },
+        loadProducts();
+    }, []);
 
-            {
-                "id": "6",
-                "title": "Assinatura Anual",
-                "image_url":
-                    "https://res.cloudinary.com/robertosousa1/image/upload/v1594492578/dio/annual_subscription_qyolci.png",
-                "price": 25
-            }
-        ]
-    );
+    function handleAddToCart(id) {
+        dispatch(CartActions.addToCartRequest(id));
+    }
+
     return (
         <Container>
             <ProductContainer>
                 <ProductList
                     data={products}
                     keyExtractor={(item) => item.id}
-                    listFooterComponent={<View/>}
-                    listFooterComponentStyle={{
-                        height: 80,
+                    ListFooterComponent={<View/>}
+                    ListFooterComponentStyle={{
+                        height: 40,
                     }}
                     renderItem={({item, index}) => (
 
@@ -84,11 +53,10 @@ export default function Catalog() {
                             <ProductTitle>{item.title}</ProductTitle>
                             <PriceContainer>
                                 <ProductPrice>{formatValue(item.price)}</ProductPrice>
-                                <ProductButtom onPress={() => {
-                                }}>
-                                    <ProductButtomText>Adicionar</ProductButtomText>
+                                <ProductButton onPress={() => handleAddToCart(item.id)}>
+                                    <ProductButtonText>Adicionar</ProductButtonText>
                                     <Feather size={30} name={"plus-circle"} color={"#d1d7e9"}/>
-                                </ProductButtom>
+                                </ProductButton>
                             </PriceContainer>
                         </Product>
                     )}

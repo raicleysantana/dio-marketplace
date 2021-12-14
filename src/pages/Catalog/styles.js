@@ -59,7 +59,7 @@ export const ProductPrice = styled.Text`
     font-weight: bold;
 `;
 
-export const ProductButtom = styled.TouchableOpacity`
+export const ProductButton = styled.TouchableOpacity`
     background: #4f5564;
     padding: 4px 8px;
     border-radius: 100px;
@@ -67,7 +67,7 @@ export const ProductButtom = styled.TouchableOpacity`
     flex-direction: row;
 `;
 
-export const ProductButtomText = styled.Text`
+export const ProductButtonText = styled.Text`
     color: #b9c0d2;
     font-weight: 800;
     padding: 0 4px;

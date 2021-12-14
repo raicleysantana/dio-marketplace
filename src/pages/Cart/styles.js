@@ -11,7 +11,7 @@ export const ProductContainer = styled.View`
     flex-direction:row;
     margin-top: 60px;
     border-radius: 20px;
-    background-color: #e83fb5;
+    background-color: #E83F5B;
 `;
 
 export const ProductList = styled(FlatList)`
@@ -62,7 +62,7 @@ export const ProductSinglePrice = styled.Text`
 
 export const ProductPrice = styled.Text`
     font-weight:bold;
-    color: #e83fb5;
+    color: #E83F5B;
     font-size: 16px;
     margin-top: 5px;
 `;
@@ -96,8 +96,8 @@ export const TotalProductsContainer = styled.View`
     align-items: center;
     justify-content: space-between;
     padding: 36px 40px;
-    border-radius: 10;
-    background: #e83fb5;
+    border-radius: 10px;
+    background: #E83F5B;
 `;
 
 export const TotalProductsText = styled.Text`
